@@ -1,0 +1,28 @@
+// clang-format off
+#include <ArduinoFake.h>
+#include <unity.h>
+
+using namespace fakeit;
+
+void setUp(void)
+{
+    ArduinoFakeReset();
+}
+
+void tearDown(void) // Not called, but needed for unity
+{
+    // clean stuff up here
+}
+
+int main(int argc, char **argv)
+{
+    extern void run_print_tests(void);
+
+    UNITY_BEGIN();
+
+    run_print_tests();
+ 
+    UNITY_END();
+
+    return 0;
+}

@@ -1,0 +1,104 @@
+#include <iostream>
+#include <ArduinoFake.h>
+#include <unity.h>
+#include "unity_filename_helper.h"
+#include "print.h"
+
+using namespace fakeit;
+
+static void assert_string_size(size_t actualSize, const char *expectedStr, std::ostringstream &actualStr)
+{
+    TEST_ASSERT_EQUAL(actualSize, strlen(expectedStr));
+    TEST_ASSERT_EQUAL_STRING(expectedStr, actualStr.str().c_str());
+    actualStr.clear();
+    actualStr.str("");
+}
+
+static void test_write(void)
+{
+    Print* print = ArduinoFakeMock(Print);
+    std::ostringstream stream;
+    setupPrintObject(ArduinoFake(Print), stream);
+
+    assert_string_size(print->write('a'), "a", stream);
+
+    const uint8_t buffer[] = { 'a', 'b', 'c'};
+    assert_string_size(print->write(buffer, sizeof(buffer)), "abc", stream);
+}
+
+template <typename T>
+static void test_print_bases(Print* print, std::ostringstream &stream)
+{
+    T t = 1234;
+
+    assert_string_size(print->print(t, HEX), "4D2", stream);
+    assert_string_size(print->print(t, OCT), "2322", stream);
+    assert_string_size(print->print(t, BIN), "00000000000000000000010011010010", stream);
+    assert_string_size(print->print(t, DEC), "1234", stream);
+}
+
+static void test_print(void)
+{
+    Print* print = ArduinoFakeMock(Print);
+    std::ostringstream stream;
+    setupPrintObject(ArduinoFake(Print), stream);
+
+    assert_string_size(print->print(F("test")), "test", stream);
+    assert_string_size(print->print('a'), "a", stream);
+    assert_string_size(print->print(String("abc")), "abc", stream);
+    assert_string_size(print->print("abc"), "abc", stream);
+
+    test_print_bases<int>(print, stream);
+    test_print_bases<unsigned int>(print, stream);
+    test_print_bases<long>(print, stream);
+    test_print_bases<unsigned long>(print, stream);
+
+    assert_string_size(print->print(12.34567), "12.35", stream);
+    assert_string_size(print->print(12.34567, 10), "12.3456700000", stream);
+
+    IPAddress printable(192, 168, 1, 1);
+    assert_string_size(print->print(printable), "192.168.1.1", stream);
+}
+
+template <typename T>
+static void test_println_bases(Print* print, std::ostringstream &stream)
+{
+    T t = 1234;
+
+    assert_string_size(print->println(t, HEX), "4D2\n", stream);
+    assert_string_size(print->println(t, OCT), "2322\n", stream);
+    assert_string_size(print->println(t, BIN), "00000000000000000000010011010010\n", stream);
+    assert_string_size(print->println(t, DEC), "1234\n", stream);
+}
+
+static void test_println(void)
+{
+    Print* print = ArduinoFakeMock(Print);
+    std::ostringstream stream;
+    setupPrintObject(ArduinoFake(Print), stream);
+
+    assert_string_size(print->println(F("test")), "test\n", stream);
+    assert_string_size(print->println('a'), "a\n", stream);
+    assert_string_size(print->println(String("abc")), "abc\n", stream);
+    assert_string_size(print->println("abc"), "abc\n", stream);
+
+    test_println_bases<int>(print, stream);
+    test_println_bases<unsigned int>(print, stream);
+    test_println_bases<long>(print, stream);
+    test_println_bases<unsigned long>(print, stream);
+
+    assert_string_size(print->println(12.34567), "12.35\n", stream);
+    assert_string_size(print->println(12.34567, 10), "12.3456700000\n", stream);
+
+    IPAddress printable(192, 168, 1, 1);
+    assert_string_size(print->println(printable), "192.168.1.1\n", stream);
+}
+
+void run_print_tests()
+{
+    unity_filename_helper_t _ufname_helper(__FILE__);
+
+    RUN_TEST(test_write);
+    RUN_TEST(test_print);
+    RUN_TEST(test_println);
+}
