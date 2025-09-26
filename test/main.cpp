@@ -17,10 +17,12 @@ void tearDown(void) // Not called, but needed for unity
 int main(int argc, char **argv)
 {
     extern void run_print_tests(void);
+    extern void run_eeprom_tests(void);
 
     UNITY_BEGIN();
 
     run_print_tests();
+    run_eeprom_tests();
  
     UNITY_END();
 
