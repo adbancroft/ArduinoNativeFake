@@ -5,6 +5,8 @@
 using namespace fakeit;
 
 static inline void setupWriteMethod(Mock<PrintFake> &mock, std::ostream &outputStream) {
+    When(Method(mock, availableForWrite)).AlwaysReturn(0);
+
     When(OverloadedMethod(mock, write, size_t(uint8_t))).AlwaysDo([&outputStream](uint8_t c) {
         outputStream.put((char)c);
         return 1;

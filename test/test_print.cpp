@@ -20,6 +20,8 @@ static void test_write(void)
     std::ostringstream stream;
     setupPrintObject(ArduinoFake(Print), stream);
 
+    TEST_ASSERT_EQUAL(0, print->availableForWrite());
+
     assert_string_size(print->write('a'), "a", stream);
 
     const uint8_t buffer[] = { 'a', 'b', 'c'};
