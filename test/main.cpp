@@ -26,7 +26,5 @@ int main(int argc, char **argv)
     run_eeprom_tests();
     run_function_tests();
  
-    UNITY_END();
-
-    return 0;
+    return UNITY_END();
 }
