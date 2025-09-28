@@ -18,11 +18,13 @@ int main(int argc, char **argv)
 {
     extern void run_print_tests(void);
     extern void run_eeprom_tests(void);
+    extern void run_function_tests(void);
 
     UNITY_BEGIN();
 
     run_print_tests();
     run_eeprom_tests();
+    run_function_tests();
  
     UNITY_END();
 
