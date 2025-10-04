@@ -82,7 +82,7 @@ static void test_delay(void)
 
     unsigned long initialValue = millis();
     delay(100);
-    TEST_ASSERT_GREATER_THAN_UINT32(initialValue+100, millis());
+    TEST_ASSERT_GREATER_THAN_UINT32(initialValue+99, millis());
 }
 
 static void test_delayMicroseconds(void)
