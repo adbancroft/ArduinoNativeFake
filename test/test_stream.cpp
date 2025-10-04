@@ -4,6 +4,7 @@
 #include <unity.h>
 #include "unity_filename_helper.h"
 #include "stream.h"
+#include "stringstream_helpers.h"
 
 using namespace fakeit;
 
@@ -20,14 +21,6 @@ static void test_timeout_property(void)
     unsigned long timeOut = distrib(gen);
     pStream->setTimeout(timeOut);
     TEST_ASSERT_EQUAL_UINT32(timeOut, pStream->getTimeout());
-}
-
-static void reset(std::stringstream &stream, const char *content)
-{
-    stream.str(content);
-    stream.clear();
-    stream.seekg(0, std::ios::beg);
-    stream.seekp(0, std::ios::beg);
 }
 
 static void test_find(void)
