@@ -18,7 +18,7 @@ static void test_write(void)
 {
     Print* print = ArduinoFakeMock(Print);
     std::ostringstream stream;
-    setupPrintObject(ArduinoFake(Print), stream);
+    setupNativeFake(ArduinoFake(Print), stream);
 
     TEST_ASSERT_EQUAL(0, print->availableForWrite());
 
@@ -43,7 +43,7 @@ static void test_print(void)
 {
     Print* print = ArduinoFakeMock(Print);
     std::ostringstream stream;
-    setupPrintObject(ArduinoFake(Print), stream);
+    setupNativeFake(ArduinoFake(Print), stream);
 
     assert_string_size(print->print(F("test")), "test", stream);
     assert_string_size(print->print('a'), "a", stream);
@@ -77,7 +77,7 @@ static void test_println(void)
 {
     Print* print = ArduinoFakeMock(Print);
     std::ostringstream stream;
-    setupPrintObject(ArduinoFake(Print), stream);
+    setupNativeFake(ArduinoFake(Print), stream);
 
     assert_string_size(print->println(F("test")), "test\n", stream);
     assert_string_size(print->println('a'), "a\n", stream);

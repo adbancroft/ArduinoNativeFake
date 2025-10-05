@@ -3,7 +3,7 @@
 
 using namespace fakeit;
 
-void setupSerialObject(fakeit::Mock<SerialFake> &mock, std::iostream &stream)
+void setupNativeFake(fakeit::Mock<SerialFake> &mock, std::iostream &stream)
 {
     static std::map<SerialFake*, unsigned long> baudRates;
     When(OverloadedMethod(mock, begin, void(unsigned long))).AlwaysDo([&mock](unsigned long rate){

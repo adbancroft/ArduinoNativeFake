@@ -1,3 +1,3 @@
 #include <ArduinoFake.h>
 
-void setupFunctionObject(fakeit::Mock<FunctionFake> &mock);
+void setupNativeFake(fakeit::Mock<FunctionFake> &mock);

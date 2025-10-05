@@ -10,13 +10,13 @@
   * @param end Iterator to the end of the address space
   */
 template<class Iterator>
-static inline void setupEEPROMObject(   fakeit::Mock<EEPROMFake> &mock, 
+static inline void setupNativeFake(   fakeit::Mock<EEPROMFake> &mock, 
                                         Iterator begin, 
                                         Iterator end) {
     static_assert(
         std::is_same<std::random_access_iterator_tag,
                         typename std::iterator_traits<Iterator>::iterator_category>::value,
-        "The setupEEPROMObject() function only accepts random access iterators\n");
+        "The setupNativeFake() function only accepts random access iterators\n");
 
     using namespace fakeit;
 

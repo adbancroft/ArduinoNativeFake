@@ -6,7 +6,7 @@
 
 using namespace fakeit;
 
-void setupFunctionObject(fakeit::Mock<FunctionFake> &mock)
+void setupNativeFake(fakeit::Mock<FunctionFake> &mock)
 {
     // Do nothing - stub to prevent crashes
     When(Method(mock, init)).AlwaysReturn();

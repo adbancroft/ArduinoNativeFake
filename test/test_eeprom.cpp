@@ -10,13 +10,13 @@ static void test_length(void)
 
     {
         std::array<unsigned char, 0> buffer;
-        setupEEPROMObject(ArduinoFake(EEPROM), buffer.begin(), buffer.end());
+        setupNativeFake(ArduinoFake(EEPROM), buffer.begin(), buffer.end());
         TEST_ASSERT_EQUAL(0, eeprom->length());
     }
 
     {
         std::array<unsigned char, 64> buffer;
-        setupEEPROMObject(ArduinoFake(EEPROM), buffer.begin(), buffer.end());
+        setupNativeFake(ArduinoFake(EEPROM), buffer.begin(), buffer.end());
         TEST_ASSERT_EQUAL(64, eeprom->length());
     }
 }
@@ -26,7 +26,7 @@ static void test_read(void)
     EEPROMClass* eeprom = ArduinoFakeMock(EEPROM);
 
     std::array<unsigned char, 5> buffer = {'t', 'e', 's', 't', '1'};
-    setupEEPROMObject(ArduinoFake(EEPROM), buffer.begin(), buffer.end());
+    setupNativeFake(ArduinoFake(EEPROM), buffer.begin(), buffer.end());
 
     TEST_ASSERT_EQUAL('t', eeprom->read(0U));
     TEST_ASSERT_EQUAL('e', eeprom->read(1U));
@@ -40,7 +40,7 @@ static void test_write(void)
     EEPROMClass* eeprom = ArduinoFakeMock(EEPROM);
 
     std::array<unsigned char, 256> buffer;
-    setupEEPROMObject(ArduinoFake(EEPROM), buffer.begin(), buffer.end());
+    setupNativeFake(ArduinoFake(EEPROM), buffer.begin(), buffer.end());
 
     eeprom->write(121, 'x');
     TEST_ASSERT_EQUAL('x', buffer[121]);
@@ -57,7 +57,7 @@ static void test_update(void)
     EEPROMClass* eeprom = ArduinoFakeMock(EEPROM);
 
     std::array<unsigned char, 256> buffer;
-    setupEEPROMObject(ArduinoFake(EEPROM), buffer.begin(), buffer.end());
+    setupNativeFake(ArduinoFake(EEPROM), buffer.begin(), buffer.end());
 
     eeprom->update(121, 'x');
     TEST_ASSERT_EQUAL('x', buffer[121]);

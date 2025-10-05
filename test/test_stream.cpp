@@ -12,7 +12,7 @@ static void test_timeout_property(void)
 {
     Stream *pStream = ArduinoFakeMock(Stream);
     std::stringstream stream;
-    setupStreamObject(ArduinoFake(Stream), stream);
+    setupNativeFake(ArduinoFake(Stream), stream);
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -27,7 +27,7 @@ static void test_find(void)
 {
     Stream *pStream = ArduinoFakeMock(Stream);
     std::stringstream stream;
-    setupStreamObject(ArduinoFake(Stream), stream);
+    setupNativeFake(ArduinoFake(Stream), stream);
 
     TEST_ASSERT_FALSE(pStream->find('c'));
     reset(stream, "aaaaaaaaa");
@@ -68,7 +68,7 @@ static void test_findUntil(void)
 {
     Stream *pStream = ArduinoFakeMock(Stream);
     std::stringstream stream;
-    setupStreamObject(ArduinoFake(Stream), stream);
+    setupNativeFake(ArduinoFake(Stream), stream);
 
     reset(stream, "");
     TEST_ASSERT_FALSE(pStream->findUntil("xxxx", "a"));
@@ -101,7 +101,7 @@ static void test_parseInt(void)
 {
     Stream *pStream = ArduinoFakeMock(Stream);
     std::stringstream stream;
-    setupStreamObject(ArduinoFake(Stream), stream);
+    setupNativeFake(ArduinoFake(Stream), stream);
 
     // Default
     reset(stream, "");
@@ -151,7 +151,7 @@ static void test_parseFloat(void)
 {
     Stream *pStream = ArduinoFakeMock(Stream);
     std::stringstream stream;
-    setupStreamObject(ArduinoFake(Stream), stream);
+    setupNativeFake(ArduinoFake(Stream), stream);
 
     // Default
     reset(stream, "");
@@ -200,7 +200,7 @@ static void test_readBytes(void)
 {
     Stream *pStream = ArduinoFakeMock(Stream);
     std::stringstream stream;
-    setupStreamObject(ArduinoFake(Stream), stream);
+    setupNativeFake(ArduinoFake(Stream), stream);
 
     char buffer[256];
     TEST_ASSERT_EQUAL(0U, pStream->readBytes(buffer, sizeof(buffer)));
@@ -220,7 +220,7 @@ static void test_readBytesUntil(void)
 {
     Stream *pStream = ArduinoFakeMock(Stream);
     std::stringstream stream;
-    setupStreamObject(ArduinoFake(Stream), stream);
+    setupNativeFake(ArduinoFake(Stream), stream);
 
     char buffer[256];
     TEST_ASSERT_EQUAL(0U, pStream->readBytesUntil('a', buffer, sizeof(buffer)));
@@ -240,7 +240,7 @@ static void test_readString(void)
 {
     Stream *pStream = ArduinoFakeMock(Stream);
     std::stringstream stream;
-    setupStreamObject(ArduinoFake(Stream), stream);
+    setupNativeFake(ArduinoFake(Stream), stream);
 
     {
         String s = pStream->readString();
@@ -264,7 +264,7 @@ static void test_readStringUntil(void)
 {
     Stream *pStream = ArduinoFakeMock(Stream);
     std::stringstream stream;
-    setupStreamObject(ArduinoFake(Stream), stream);
+    setupNativeFake(ArduinoFake(Stream), stream);
 
     {
         String s = pStream->readStringUntil(' ');
