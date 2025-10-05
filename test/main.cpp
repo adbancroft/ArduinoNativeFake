@@ -18,6 +18,7 @@ int main(int argc, char **argv)
     extern void run_eeprom_tests(void);
     extern void run_function_tests(void);
     extern void run_stream_tests(void);
+    extern void run_serial_tests(void);
 
     UNITY_BEGIN();
 
@@ -25,6 +26,7 @@ int main(int argc, char **argv)
     run_eeprom_tests();
     run_function_tests();
     run_stream_tests();
- 
+    run_serial_tests();
+    
     return UNITY_END();
 }
