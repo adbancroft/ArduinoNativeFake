@@ -15,14 +15,29 @@ void setupNativeFake(fakeit::Mock<FunctionFake> &mock)
     When(Method(mock, pinMode)).AlwaysReturn();
 
     // Should be overridden per test - but stub to prevent crashes
-    When(Method(mock, digitalWrite)).AlwaysReturn();
-    When(Method(mock, digitalRead)).AlwaysReturn(LOW);
-    When(Method(mock, analogRead)).AlwaysReturn(LOW);
+    // Just return the last value set.
+    using map_uint8_uint8_t = std::map<FunctionFake*, std::map<uint8_t, uint8_t>>;
+    static map_uint8_uint8_t pinValues;
+    When(Method(mock, digitalWrite)).AlwaysDo([&mock](uint8_t pin, uint8_t value) {
+        pinValues[&mock.get()][pin] = value;
+    });
+    When(Method(mock, digitalRead)).AlwaysDo([&mock](uint8_t pin){
+        auto result = pinValues.insert(std::make_pair(&mock.get(), map_uint8_uint8_t::mapped_type()));
+        if (result.first->second.find(pin)==result.first->second.end()) {
+            return LOW;
+        }
+        return (int)result.first->second[pin];
+    });
+    When(Method(mock, analogWrite)).AlwaysDo([](uint8_t pin, uint8_t value) {
+        digitalWrite(pin, value);
+    });
+    When(Method(mock, analogRead)).AlwaysDo([](uint8_t pin){
+        return digitalRead(pin);
+    });
 
     // Do nothing - stub to prevent crashes
     When(Method(mock, analogReference)).AlwaysReturn();
     When(Method(mock, analogReadResolution)).AlwaysReturn();
-    When(Method(mock, analogWrite)).AlwaysReturn();
 
     When(Method(mock, millis)).AlwaysDo([]() {
         return std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now()).time_since_epoch().count(); 
@@ -109,8 +124,6 @@ void setupNativeFake(fakeit::Mock<FunctionFake> &mock)
     When(Method(mock, digitalPinToPort)).AlwaysDo([](uint8_t pin) -> uint8_t { return pin; });
     When(Method(mock, digitalPinToBitMask)).AlwaysDo([](uint8_t pin) -> uint8_t { return pin; });
     When(Method(mock, digitalPinToTimer)).AlwaysDo([](uint8_t pin) -> uint8_t { return pin; });
-
-    using map_uint8_uint8_t = std::map<FunctionFake*, std::map<uint8_t, uint8_t>>;
 
     // These functions are idempotent, so we have to deal with lifetime issues since returning pointers
     static map_uint8_uint8_t mockToOutputRegister;

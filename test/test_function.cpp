@@ -16,18 +16,10 @@ static void test_stubs(void)
     Verify(Method(ArduinoFake(Function), init)).AtLeastOnce();
     pinMode(8, INPUT_PULLDOWN);
     Verify(Method(ArduinoFake(Function), pinMode)).AtLeastOnce();
-    digitalWrite(8, LOW);
-    Verify(Method(ArduinoFake(Function), digitalWrite)).AtLeastOnce();
-    digitalRead(8);
-    Verify(Method(ArduinoFake(Function), digitalRead)).AtLeastOnce();
-    analogRead(8);
-    Verify(Method(ArduinoFake(Function), analogRead)).AtLeastOnce();
     analogReference(11);
     Verify(Method(ArduinoFake(Function), analogReference)).AtLeastOnce();
     analogReadResolution(11);
     Verify(Method(ArduinoFake(Function), analogReadResolution)).AtLeastOnce();
-    analogWrite(8, LOW);
-    Verify(Method(ArduinoFake(Function), analogWrite)).AtLeastOnce();
     pulseIn(8, 100, 100000);
     Verify(Method(ArduinoFake(Function), pulseIn)).AtLeastOnce();
     pulseInLong(8, 100, 100000);
@@ -157,6 +149,24 @@ static void test_pinport(void)
     TEST_ASSERT_EQUAL(portModeRegister(pin), portModeRegister(pin));
 }
 
+static void test_pin_readwrite(void)
+{
+    setupNativeFake(ArduinoFake(Function));
+
+    TEST_ASSERT_EQUAL(LOW, digitalRead(3));
+    Verify(Method(ArduinoFake(Function), digitalRead)).AtLeastOnce();
+    TEST_ASSERT_EQUAL(LOW, analogRead(3));
+    Verify(Method(ArduinoFake(Function), analogRead)).AtLeastOnce();
+
+    // Read returns last write
+    digitalWrite(7, 99);
+    Verify(Method(ArduinoFake(Function), digitalWrite)).AtLeastOnce();
+    TEST_ASSERT_EQUAL(99, digitalRead(7));
+    analogWrite(11, 123);
+    Verify(Method(ArduinoFake(Function), analogWrite)).AtLeastOnce();
+    TEST_ASSERT_EQUAL(123, analogRead(11));
+}
+
 void run_function_tests()
 {
     unity_filename_helper_t _ufname_helper(__FILE__);
@@ -171,4 +181,5 @@ void run_function_tests()
     RUN_TEST(test_random);
     RUN_TEST(test_map);
     RUN_TEST(test_pinport);
+    RUN_TEST(test_pin_readwrite);
 }
