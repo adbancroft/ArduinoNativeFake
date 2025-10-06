@@ -1,0 +1,16 @@
+{
+  "name": "ArduinoNativeFake",
+  "version": "0.0.1",
+  "keywords": "test, mock, fake, arduino, native",
+  "exclude": [
+    "test"
+  ],
+  "build": {
+    "libCompatMode": "off"
+  },
+  "frameworks": "arduino",
+  "platforms": "native, windows_x86",
+  "dependencies" : {
+    "ArduinoFake" : "file://c:/dev/ArduinoFake"
+  }
+}
