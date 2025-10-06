@@ -96,7 +96,12 @@ void setupNativeFake(fakeit::Mock<FunctionFake> &mock)
     });
 
     When(Method(mock, map)).AlwaysDo([](long x, long in_min, long in_max, long out_min, long out_max){
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+        // Avoid division by zero error, since that's what AVR does
+        long outRange = (in_max - in_min); 
+        if (outRange==0L) {
+            outRange = 1L;
+        }
+        return (x - in_min) * (out_max - out_min) / outRange + out_min;
     });
 
     When(Method(mock, yield)).AlwaysReturn();
