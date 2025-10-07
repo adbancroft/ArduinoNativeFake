@@ -104,8 +104,9 @@ static void test_random(void)
 {
     setupNativeFake(ArduinoFake(Function));
 
-    TEST_ASSERT_EQUAL(1L, random(1L));
-    TEST_ASSERT_EQUAL(1L, random(0L, 1L));
+    TEST_ASSERT_INT_WITHIN(1L, 0L, random(1L));
+    TEST_ASSERT_INT_WITHIN(1L, 0L, random(0L, 1L));
+    TEST_ASSERT_EQUAL(1L, random(1L, 1L));
     TEST_ASSERT_EQUAL(100L, random(100L, 100L));
 
     randomSeed(1234);

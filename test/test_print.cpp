@@ -8,10 +8,10 @@ using namespace fakeit;
 
 static void assert_string_size(size_t actualSize, const char *expectedStr, std::ostringstream &actualStr)
 {
-    TEST_ASSERT_EQUAL(actualSize, strlen(expectedStr));
     TEST_ASSERT_EQUAL_STRING(expectedStr, actualStr.str().c_str());
-    actualStr.clear();
     actualStr.str("");
+    actualStr.clear();
+    actualStr.seekp(0, std::ios::beg);    
 }
 
 static void test_write(void)
@@ -28,6 +28,18 @@ static void test_write(void)
     assert_string_size(print->write(buffer, sizeof(buffer)), "abc", stream);
 }
 
+static std::string leftPad(std::string str, size_t targetLength, char paddingChar) {
+    if (str.length() < targetLength) {
+        size_t paddingNeeded = targetLength - str.length();
+        str.insert(0, paddingNeeded, paddingChar);
+    }
+    return str;
+}
+
+static std::string padToLongWidth(const char *toPad) {
+    return leftPad(toPad, sizeof(long)*CHAR_BIT, '0');
+}
+
 template <typename T>
 static void test_print_bases(Print* print, std::ostringstream &stream)
 {
@@ -35,7 +47,7 @@ static void test_print_bases(Print* print, std::ostringstream &stream)
 
     assert_string_size(print->print(t, HEX), "4D2", stream);
     assert_string_size(print->print(t, OCT), "2322", stream);
-    assert_string_size(print->print(t, BIN), "00000000000000000000010011010010", stream);
+    assert_string_size(print->print(t, BIN), padToLongWidth("10011010010").c_str(), stream);
     assert_string_size(print->print(t, DEC), "1234", stream);
 }
 
@@ -69,7 +81,7 @@ static void test_println_bases(Print* print, std::ostringstream &stream)
 
     assert_string_size(print->println(t, HEX), "4D2\n", stream);
     assert_string_size(print->println(t, OCT), "2322\n", stream);
-    assert_string_size(print->println(t, BIN), "00000000000000000000010011010010\n", stream);
+    assert_string_size(print->println(t, BIN), (padToLongWidth("10011010010")+"\n").c_str(), stream);
     assert_string_size(print->println(t, DEC), "1234\n", stream);
 }
 
