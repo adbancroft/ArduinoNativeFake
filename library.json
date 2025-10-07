@@ -11,6 +11,6 @@
   "frameworks": "arduino",
   "platforms": "native, windows_x86",
   "dependencies" : {
-    "ArduinoFake" : "file://c:/dev/ArduinoFake"
+    "ArduinoFake" : "https://github.com/adbancroft/ArduinoFake#speeduino"
   }
 }
