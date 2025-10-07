@@ -11,8 +11,25 @@ void setupNativeFake(fakeit::Mock<FunctionFake> &mock)
     // Do nothing - stub to prevent crashes
     When(Method(mock, init)).AlwaysReturn();
 
-    // Do nothing - stub to prevent crashes
-    When(Method(mock, pinMode)).AlwaysReturn();
+    // Mimic the AVR core.
+    When(Method(mock, pinMode)).AlwaysDo([](uint8_t pin, uint8_t mode){
+    	uint8_t port = digitalPinToPort(pin);
+    	if (port == NOT_A_PIN) return;
+
+        volatile uint8_t *reg = portModeRegister(port);
+        volatile uint8_t *out = portOutputRegister(port);
+
+        uint8_t bit = digitalPinToBitMask(pin);
+        if (mode == INPUT) { 
+            *reg &= ~bit;
+            *out &= ~bit;
+        } else if (mode == INPUT_PULLUP) {
+            *reg &= ~bit;
+            *out |= bit;
+        } else {
+            *reg |= bit;
+        }
+    });
 
     // Should be overridden per test - but stub to prevent crashes
     // Just return the last value set.
@@ -129,19 +146,28 @@ void setupNativeFake(fakeit::Mock<FunctionFake> &mock)
     static map_uint8_uint8_t mockToOutputRegister;
     When(Method(mock, portOutputRegister)).AlwaysDo([&mock](uint8_t pin) { 
         auto result = mockToOutputRegister.insert(std::make_pair(&mock.get(), map_uint8_uint8_t::mapped_type()));
-        result.first->second[pin] = pin;
+        if (result.first->second.find(pin)==result.first->second.end())
+        {
+            result.first->second[pin] = 0U;
+        }
         return &result.first->second[pin]; 
     });
     static map_uint8_uint8_t mockToInputRegister;
     When(Method(mock, portInputRegister)).AlwaysDo([&mock](uint8_t pin) { 
         auto result = mockToInputRegister.insert(std::make_pair(&mock.get(), map_uint8_uint8_t::mapped_type()));
-        result.first->second[pin] = pin;
+        if (result.first->second.find(pin)==result.first->second.end())
+        {
+            result.first->second[pin] = 0U;
+        }
         return &result.first->second[pin]; 
     });
     static map_uint8_uint8_t mockToModeRegister;
     When(Method(mock, portModeRegister)).AlwaysDo([&mock](uint8_t pin) { 
         auto result = mockToModeRegister.insert(std::make_pair(&mock.get(), map_uint8_uint8_t::mapped_type()));
-        result.first->second[pin] = pin;
+        if (result.first->second.find(pin)==result.first->second.end())
+        {
+            result.first->second[pin] = 0U;
+        }
         return &result.first->second[pin]; 
     });
 }
