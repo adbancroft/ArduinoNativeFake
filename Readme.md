@@ -1,5 +1,7 @@
 # Arduino Native Fake
 
+[![Unit Tests](https://github.com/adbancroft/ArduinoNativeFake/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/adbancroft/ArduinoNativeFake/actions/workflows/unit-tests.yml)
+
 ## What is this?
 
 It's an extension to [ArduinoFake](https://github.com/FabioBatSilva/ArduinoFake) that mocks out enough functionality to run the [Speeduino](https://github.com/speeduino/speeduino) unit tests using the [Platform IO 'native' platform](https://docs.platformio.org/en/latest/platforms/native.html).
