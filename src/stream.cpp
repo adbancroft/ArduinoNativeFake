@@ -124,7 +124,7 @@ static std::string removeIgnoreChar(const std::string& s, char c) {
     return s;
 }
 
-void setupNativeFake(fakeit::Mock<StreamFake> &mock, std::iostream &stream)
+void setupNativeFake(fakeit::Mock<StreamFake> &mock, std::istream &stream)
 {
     // These are pure virtual in Stream, so don't implement here (they'll be implemented in fakes derived from StreamFake)
     // virtual int available() = 0;
