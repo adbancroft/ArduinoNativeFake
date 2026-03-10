@@ -3,7 +3,7 @@
 
 using namespace fakeit;
 
-void setupNativeFake(fakeit::Mock<SerialFake> &mock, std::iostream &stream)
+void setupNativeFake(fakeit::Mock<SerialFake> &mock, std::ostream &oStream, std::istream &iStream)
 {
     static std::map<SerialFake*, unsigned long> baudRates;
     When(OverloadedMethod(mock, begin, void(unsigned long))).AlwaysDo([&mock](unsigned long rate){
@@ -17,37 +17,37 @@ void setupNativeFake(fakeit::Mock<SerialFake> &mock, std::iostream &stream)
         mock.get().flush();
     });
 
-    When(Method(mock, availableForWrite)).AlwaysDo([&stream]() {
-        std::iostream::pos_type original = stream.tellp();
-        stream.seekp(0, std::ios::end);
-        std::iostream::pos_type available = stream.tellp();
-        stream.seekp(original);
+    When(Method(mock, availableForWrite)).AlwaysDo([&oStream]() {
+        std::ostream::pos_type original = oStream.tellp();
+        oStream.seekp(0, std::ios::end);
+        std::ostream::pos_type available = oStream.tellp();
+        oStream.seekp(original);
         return (int)available;
     });
     
-    When(Method(mock, available)).AlwaysDo([&stream]() {
-        std::iostream::pos_type original = stream.tellg();
-        stream.seekg(0, std::ios::end);
-        std::iostream::pos_type available = stream.tellg();
-        stream.seekg(original);
+    When(Method(mock, available)).AlwaysDo([&iStream]() {
+        std::istream::pos_type original = iStream.tellg();
+        iStream.seekg(0, std::ios::end);
+        std::istream::pos_type available = iStream.tellg();
+        iStream.seekg(original);
         return (int)available;
     });
-    When(Method(mock, peek)).AlwaysDo([&stream]() {
-        return (int)stream.peek();
+    When(Method(mock, peek)).AlwaysDo([&iStream]() {
+        return (int)iStream.peek();
     });
-    When(Method(mock, read)).AlwaysDo([&stream]() {
-        return (int)stream.get();
+    When(Method(mock, read)).AlwaysDo([&iStream]() {
+        return (int)iStream.get();
     });
-    When(Method(mock, flush)).AlwaysDo([&stream]() {
-        stream.flush();
+    When(Method(mock, flush)).AlwaysDo([&oStream]() {
+        oStream.flush();
     });
-    When(OverloadedMethod(mock, write, size_t(uint8_t))).AlwaysDo([&stream](uint8_t c){
-        stream.put(c);
-        return stream.bad() ? 0U : 1U;
+    When(OverloadedMethod(mock, write, size_t(uint8_t))).AlwaysDo([&oStream](uint8_t c){
+        oStream.put(c);
+        return oStream.bad() ? 0U : 1U;
     });
-    When(OverloadedMethod(mock, write, size_t(const uint8_t*, size_t))).AlwaysDo([&stream](const uint8_t* buffer, size_t length){
-        stream.write((const char *)buffer, length);
-        return stream.bad() ? 0U : length;
+    When(OverloadedMethod(mock, write, size_t(const uint8_t*, size_t))).AlwaysDo([&oStream](const uint8_t* buffer, size_t length){
+        oStream.write((const char *)buffer, length);
+        return oStream.bad() ? 0U : length;
     });
 
     When(Method(mock, readBreak)).AlwaysReturn(0U);

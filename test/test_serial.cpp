@@ -10,7 +10,7 @@ using namespace fakeit;
 static void test_stubs(void)
 {
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Serial), stream);
+    setupNativeFake(ArduinoFake(Serial), stream, stream);
 
     Serial.begin(9600);
     TEST_ASSERT_EQUAL(9600, Serial.baud());
@@ -43,7 +43,7 @@ static void test_stubs(void)
 static void test_availableForWrite(void)
 {
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Serial), stream);
+    setupNativeFake(ArduinoFake(Serial), stream, stream);
 
     TEST_ASSERT_EQUAL(0, Serial.availableForWrite());
 
@@ -54,7 +54,7 @@ static void test_availableForWrite(void)
 static void test_available(void)
 {
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Serial), stream);
+    setupNativeFake(ArduinoFake(Serial), stream, stream);
 
     TEST_ASSERT_EQUAL(0, Serial.available());
 
@@ -65,7 +65,7 @@ static void test_available(void)
 static void test_peek(void)
 {
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Serial), stream);
+    setupNativeFake(ArduinoFake(Serial), stream, stream);
 
     TEST_ASSERT_EQUAL(-1, Serial.peek());
 
@@ -78,7 +78,7 @@ static void test_peek(void)
 static void test_read(void)
 {
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Serial), stream);
+    setupNativeFake(ArduinoFake(Serial), stream, stream);
 
     TEST_ASSERT_EQUAL(-1, Serial.read());
 
@@ -91,7 +91,7 @@ static void test_read(void)
 static void test_write(void)
 {
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Serial), stream);
+    setupNativeFake(ArduinoFake(Serial), stream, stream);
 
     TEST_ASSERT_EQUAL(1, Serial.write('a'));
     TEST_ASSERT_EQUAL('a', stream.str()[0]);

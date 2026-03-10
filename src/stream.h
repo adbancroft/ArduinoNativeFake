@@ -1,3 +1,3 @@
 #include <ArduinoFake.h>
 
-void setupNativeFake(fakeit::Mock<StreamFake> &mock, std::iostream &stream);
+void setupNativeFake(fakeit::Mock<StreamFake> &mock, std::istream &stream);
