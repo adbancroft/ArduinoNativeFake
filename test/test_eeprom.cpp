@@ -6,7 +6,7 @@
 
 static void test_length(void)
 {
-    EEPROMClass* eeprom = ArduinoFakeMock(EEPROM);
+    std::shared_ptr<EEPROMClass> eeprom(ArduinoFakeMock(EEPROM));
 
     {
         std::array<unsigned char, 0> buffer;
@@ -23,7 +23,7 @@ static void test_length(void)
 
 static void test_read(void)
 {
-    EEPROMClass* eeprom = ArduinoFakeMock(EEPROM);
+    std::shared_ptr<EEPROMClass> eeprom(ArduinoFakeMock(EEPROM));
 
     std::array<unsigned char, 5> buffer = {'t', 'e', 's', 't', '1'};
     setupNativeFake(ArduinoFake(EEPROM), buffer.begin(), buffer.end());
@@ -37,7 +37,7 @@ static void test_read(void)
     
 static void test_write(void)
 {
-    EEPROMClass* eeprom = ArduinoFakeMock(EEPROM);
+    std::shared_ptr<EEPROMClass> eeprom(ArduinoFakeMock(EEPROM));
 
     std::array<unsigned char, 256> buffer;
     setupNativeFake(ArduinoFake(EEPROM), buffer.begin(), buffer.end());
@@ -54,7 +54,7 @@ static void test_write(void)
 
 static void test_update(void)
 {
-    EEPROMClass* eeprom = ArduinoFakeMock(EEPROM);
+    std::shared_ptr<EEPROMClass> eeprom(ArduinoFakeMock(EEPROM));
 
     std::array<unsigned char, 256> buffer;
     setupNativeFake(ArduinoFake(EEPROM), buffer.begin(), buffer.end());

@@ -10,7 +10,7 @@ using namespace fakeit;
 
 static void test_timeout_property(void)
 {
-    Stream *pStream = ArduinoFakeMock(Stream);
+    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
     std::stringstream stream;
     setupNativeFake(ArduinoFake(Stream), stream);
 
@@ -25,7 +25,7 @@ static void test_timeout_property(void)
 
 static void test_find(void)
 {
-    Stream *pStream = ArduinoFakeMock(Stream);
+    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
     std::stringstream stream;
     setupNativeFake(ArduinoFake(Stream), stream);
 
@@ -66,7 +66,7 @@ static void test_find(void)
  
 static void test_findUntil(void)
 {
-    Stream *pStream = ArduinoFakeMock(Stream);
+    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
     std::stringstream stream;
     setupNativeFake(ArduinoFake(Stream), stream);
 
@@ -99,7 +99,7 @@ static void test_findUntil(void)
 
 static void test_parseInt(void)
 {
-    Stream *pStream = ArduinoFakeMock(Stream);
+    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
     std::stringstream stream;
     setupNativeFake(ArduinoFake(Stream), stream);
 
@@ -149,7 +149,7 @@ static void test_parseInt(void)
 
 static void test_parseFloat(void)
 {
-    Stream *pStream = ArduinoFakeMock(Stream);
+    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
     std::stringstream stream;
     setupNativeFake(ArduinoFake(Stream), stream);
 
@@ -198,7 +198,7 @@ static void test_parseFloat(void)
 
 static void test_readBytes(void)
 {
-    Stream *pStream = ArduinoFakeMock(Stream);
+    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
     std::stringstream stream;
     setupNativeFake(ArduinoFake(Stream), stream);
 
@@ -218,7 +218,7 @@ static void test_readBytes(void)
 
 static void test_readBytesUntil(void)
 {
-    Stream *pStream = ArduinoFakeMock(Stream);
+    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
     std::stringstream stream;
     setupNativeFake(ArduinoFake(Stream), stream);
 
@@ -238,7 +238,7 @@ static void test_readBytesUntil(void)
 
 static void test_readString(void)
 {
-    Stream *pStream = ArduinoFakeMock(Stream);
+    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
     std::stringstream stream;
     setupNativeFake(ArduinoFake(Stream), stream);
 
@@ -262,7 +262,7 @@ static void test_readString(void)
 
 static void test_readStringUntil(void)
 {
-    Stream *pStream = ArduinoFakeMock(Stream);
+    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
     std::stringstream stream;
     setupNativeFake(ArduinoFake(Stream), stream);
 
