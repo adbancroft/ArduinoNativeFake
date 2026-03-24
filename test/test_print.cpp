@@ -16,9 +16,10 @@ static void assert_string_size(size_t actualSize, const char *expectedStr, std::
 
 static void test_write(void)
 {
-    Print* print(SimpleArduinoFake::getContext()._Print.getFake());
+    auto &printFake = SimpleArduinoFake::getContext()._Print;
+    Print* print(printFake.getFake());
     std::ostringstream stream;
-    setupNativeFake(SimpleArduinoFake::getContext()._Print, stream);
+    setupNativeFake(printFake, stream);
 
     TEST_ASSERT_EQUAL(0, print->availableForWrite());
 
@@ -53,9 +54,10 @@ static void test_print_bases(Print* print, std::ostringstream &stream)
 
 static void test_print(void)
 {
-    Print* print(SimpleArduinoFake::getContext()._Print.getFake());
+    auto &printFake = SimpleArduinoFake::getContext()._Print;
+    Print* print(printFake.getFake());
     std::ostringstream stream;
-    setupNativeFake(SimpleArduinoFake::getContext()._Print, stream);
+    setupNativeFake(printFake, stream);
 
     assert_string_size(print->print(F("test")), "test", stream);
     assert_string_size(print->print('a'), "a", stream);
@@ -87,9 +89,10 @@ static void test_println_bases(Print* print, std::ostringstream &stream)
 
 static void test_println(void)
 {
-    Print* print(SimpleArduinoFake::getContext()._Print.getFake());
+    auto &printFake = SimpleArduinoFake::getContext()._Print;
+    Print* print(printFake.getFake());
     std::ostringstream stream;
-    setupNativeFake(SimpleArduinoFake::getContext()._Print, stream);
+    setupNativeFake(printFake, stream);
 
     assert_string_size(print->println(F("test")), "test\n", stream);
     assert_string_size(print->println('a'), "a\n", stream);

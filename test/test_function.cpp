@@ -9,35 +9,36 @@ static void nullInterrupt(void) {}
 
 static void test_stubs(void)
 {
-    setupNativeFake(SimpleArduinoFake::getContext()._Function);
+    auto &functionFake = SimpleArduinoFake::getContext()._Function;
+    setupNativeFake(functionFake);
 
     // These are all stubbed to do nothing
     init();
-    Verify(Method(SimpleArduinoFake::getContext()._Function, init)).AtLeastOnce();
+    Verify(Method(functionFake, init)).AtLeastOnce();
     pinMode(8, INPUT_PULLDOWN);
-    Verify(Method(SimpleArduinoFake::getContext()._Function, pinMode)).AtLeastOnce();
+    Verify(Method(functionFake, pinMode)).AtLeastOnce();
     analogReference(11);
-    Verify(Method(SimpleArduinoFake::getContext()._Function, analogReference)).AtLeastOnce();
+    Verify(Method(functionFake, analogReference)).AtLeastOnce();
     analogReadResolution(11);
-    Verify(Method(SimpleArduinoFake::getContext()._Function, analogReadResolution)).AtLeastOnce();
+    Verify(Method(functionFake, analogReadResolution)).AtLeastOnce();
     pulseIn(8, 100, 100000);
-    Verify(Method(SimpleArduinoFake::getContext()._Function, pulseIn)).AtLeastOnce();
+    Verify(Method(functionFake, pulseIn)).AtLeastOnce();
     pulseInLong(8, 100, 100000);
-    Verify(Method(SimpleArduinoFake::getContext()._Function, pulseInLong)).AtLeastOnce();
+    Verify(Method(functionFake, pulseInLong)).AtLeastOnce();
     detachInterrupt(11);
-    Verify(Method(SimpleArduinoFake::getContext()._Function, detachInterrupt)).AtLeastOnce();
+    Verify(Method(functionFake, detachInterrupt)).AtLeastOnce();
     attachInterrupt(11, nullInterrupt, INPUT);
-    Verify(Method(SimpleArduinoFake::getContext()._Function, attachInterrupt)).AtLeastOnce();
+    Verify(Method(functionFake, attachInterrupt)).AtLeastOnce();
     sei();
-    Verify(Method(SimpleArduinoFake::getContext()._Function, sei)).AtLeastOnce();
+    Verify(Method(functionFake, sei)).AtLeastOnce();
     cli();
-    Verify(Method(SimpleArduinoFake::getContext()._Function, cli)).AtLeastOnce();
+    Verify(Method(functionFake, cli)).AtLeastOnce();
     tone(11, 5000, 300);
-    Verify(Method(SimpleArduinoFake::getContext()._Function, tone)).AtLeastOnce();
+    Verify(Method(functionFake, tone)).AtLeastOnce();
     noTone(11);
-    Verify(Method(SimpleArduinoFake::getContext()._Function, noTone)).AtLeastOnce();
+    Verify(Method(functionFake, noTone)).AtLeastOnce();
     yield();
-    Verify(Method(SimpleArduinoFake::getContext()._Function, yield)).AtLeastOnce();
+    Verify(Method(functionFake, yield)).AtLeastOnce();
 }
 
 static void test_millis(void)
@@ -155,19 +156,20 @@ static void test_pinport(void)
 
 static void test_pin_readwrite(void)
 {
-    setupNativeFake(SimpleArduinoFake::getContext()._Function);
+    auto &functionFake = SimpleArduinoFake::getContext()._Function;
+    setupNativeFake(functionFake);
 
     TEST_ASSERT_EQUAL(LOW, digitalRead(3));
-    Verify(Method(SimpleArduinoFake::getContext()._Function, digitalRead)).AtLeastOnce();
+    Verify(Method(functionFake, digitalRead)).AtLeastOnce();
     TEST_ASSERT_EQUAL(LOW, analogRead(3));
-    Verify(Method(SimpleArduinoFake::getContext()._Function, analogRead)).AtLeastOnce();
+    Verify(Method(functionFake, analogRead)).AtLeastOnce();
 
     // Read returns last write
     digitalWrite(7, 99);
-    Verify(Method(SimpleArduinoFake::getContext()._Function, digitalWrite)).AtLeastOnce();
+    Verify(Method(functionFake, digitalWrite)).AtLeastOnce();
     TEST_ASSERT_EQUAL(99, digitalRead(7));
     analogWrite(11, 123);
-    Verify(Method(SimpleArduinoFake::getContext()._Function, analogWrite)).AtLeastOnce();
+    Verify(Method(functionFake, analogWrite)).AtLeastOnce();
     TEST_ASSERT_EQUAL(123, analogRead(11));
 }
 
@@ -204,7 +206,8 @@ static uint8_t getPinMode(uint8_t pin)
 
 static void test_pinMode(void)
 {
-    setupNativeFake(SimpleArduinoFake::getContext()._Function);
+    auto &functionFake = SimpleArduinoFake::getContext()._Function;
+    setupNativeFake(functionFake);
     static constexpr uint8_t PA = 1;
     static constexpr uint8_t PB = 2;
     static constexpr uint8_t PC = 3;
@@ -368,11 +371,11 @@ static void test_pinMode(void)
         _BV( 7 )	, // PK 7 ** 69 ** A15	
     };
 
-    When(Method(SimpleArduinoFake::getContext()._Function, digitalPinToPort)).AlwaysDo([](uint8_t pin) -> uint8_t { return digital_pin_to_port[pin]; });
-    When(Method(SimpleArduinoFake::getContext()._Function, digitalPinToBitMask)).AlwaysDo([](uint8_t pin) -> uint8_t { return digital_pin_to_bit_mask[pin]; });
+    When(Method(functionFake, digitalPinToPort)).AlwaysDo([](uint8_t pin) -> uint8_t { return digital_pin_to_port[pin]; });
+    When(Method(functionFake, digitalPinToBitMask)).AlwaysDo([](uint8_t pin) -> uint8_t { return digital_pin_to_bit_mask[pin]; });
 
     pinMode(8, INPUT_PULLUP);
-    Verify(Method(SimpleArduinoFake::getContext()._Function, pinMode)).AtLeastOnce();
+    Verify(Method(functionFake, pinMode)).AtLeastOnce();
     TEST_ASSERT_EQUAL(INPUT_PULLUP, getPinMode(8));
 
     pinMode(11, INPUT);
