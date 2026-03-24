@@ -3,7 +3,12 @@
 #include "streamSetup.h"
 #include "printSetup.h"
 
+namespace ArduinoNativeFake
+{
+
 using namespace fakeit;
+
+namespace StreamDetail {
 
 template <class Iterator>
 static std::string find_begins_with(const Iterator begin, const Iterator end, const std::string &next)
@@ -124,6 +129,8 @@ static std::string removeIgnoreChar(const std::string& s, char c) {
     return s;
 }
 
+} // namespace StreamDetail
+
 void setupNativeFake(fakeit::Mock<Stream> &mock, std::istream &stream)
 {
     // These are pure virtual in Stream, so don't implement here (they'll be implemented in fakes derived from Stream)
@@ -155,20 +162,20 @@ void setupNativeFake(fakeit::Mock<Stream> &mock, std::istream &stream)
     // search terminated if the terminator string is found
     // returns true if target string is found, false if terminated or timed out
     When(OverloadedMethod(mock, findUntil, bool(const char*, size_t, const char*, size_t))).AlwaysDo([&stream](const char *target, size_t targetLen, const char *terminate, size_t termLen){
-        std::string strTarget(target, max_strlen(target, targetLen));
-        std::string strTerminate(terminate, max_strlen(terminate, termLen));
+        std::string strTarget(target, StreamDetail::max_strlen(target, targetLen));
+        std::string strTerminate(terminate, StreamDetail::max_strlen(terminate, termLen));
 
         std::string found;
         if (!strTarget.empty() && !strTerminate.empty())
         {
             std::array<std::string, 2> searchTargets = { strTarget, strTerminate };
-            found = search(searchTargets.begin(), searchTargets.end(), stream);
+            found = StreamDetail::search(searchTargets.begin(), searchTargets.end(), stream);
         }
         else if (!strTarget.empty()) {
-            found = search(strTarget, stream);
+            found = StreamDetail::search(strTarget, stream);
         }
         else if (!strTerminate.empty()) {
-            found = search(strTerminate, stream);
+            found = StreamDetail::search(strTerminate, stream);
         } else {
             // Deliberate - do nothing
         }
@@ -178,12 +185,12 @@ void setupNativeFake(fakeit::Mock<Stream> &mock, std::istream &stream)
     When(OverloadedMethod(mock, parseInt, long(LookaheadMode, char))).AlwaysDo([&stream](LookaheadMode mode, char ignore){
         // Create a locale with the custom ignore facet and
         // imbue the stringstream with the custom locale
-        auto oldLocale = stream.imbue(std::locale(std::locale::classic(), new ignore_char_int_t(mode, ignore)));
+        auto oldLocale = stream.imbue(std::locale(std::locale::classic(), new StreamDetail::ignore_char_int_t(mode, ignore)));
         std::string i;
         stream >> i;
         (void)stream.imbue(oldLocale);
         try { 
-            return std::stol(removeIgnoreChar(i, ignore));
+            return std::stol(StreamDetail::removeIgnoreChar(i, ignore));
         }
         catch (std::invalid_argument &e)
         {
@@ -194,12 +201,12 @@ void setupNativeFake(fakeit::Mock<Stream> &mock, std::istream &stream)
     When(OverloadedMethod(mock, parseFloat, float(LookaheadMode, char))).AlwaysDo([&stream](LookaheadMode mode, char ignore){
         // Create a locale with the custom ignore facet and
         // imbue the stringstream with the custom locale
-        auto oldLocale = stream.imbue(std::locale(std::locale::classic(), new ignore_char_float_t(mode, ignore)));
+        auto oldLocale = stream.imbue(std::locale(std::locale::classic(), new StreamDetail::ignore_char_float_t(mode, ignore)));
         std::string i;
         stream >> i;
         (void)stream.imbue(oldLocale);
         try { 
-            return std::stof(removeIgnoreChar(i, ignore));
+            return std::stof(StreamDetail::removeIgnoreChar(i, ignore));
         }
         catch (std::invalid_argument &e)
         {
@@ -241,4 +248,6 @@ void setupNativeFake(fakeit::Mock<Stream> &mock, std::istream &stream)
         }
         return String(s.c_str());
     });
+}
+
 }

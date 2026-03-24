@@ -13,7 +13,7 @@ static void test_timeout_property(void)
     auto &streamFake = SimpleArduinoFake::getContext()._Stream;
     Stream* pStream(streamFake.getFake());
     std::stringstream stream;
-    setupNativeFake(streamFake, stream);
+    ArduinoNativeFake::setupNativeFake(streamFake, stream);
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -29,7 +29,7 @@ static void test_find(void)
     auto &streamFake = SimpleArduinoFake::getContext()._Stream;
     Stream* pStream(streamFake.getFake());
     std::stringstream stream;
-    setupNativeFake(streamFake, stream);
+    ArduinoNativeFake::setupNativeFake(streamFake, stream);
 
     TEST_ASSERT_FALSE(pStream->find('c'));
     reset(stream, "aaaaaaaaa");
@@ -71,7 +71,7 @@ static void test_findUntil(void)
     auto &streamFake = SimpleArduinoFake::getContext()._Stream;
     Stream* pStream(streamFake.getFake());
     std::stringstream stream;
-    setupNativeFake(streamFake, stream);
+    ArduinoNativeFake::setupNativeFake(streamFake, stream);
 
     reset(stream, "");
     TEST_ASSERT_FALSE(pStream->findUntil("xxxx", "a"));
@@ -105,7 +105,7 @@ static void test_parseInt(void)
     auto &streamFake = SimpleArduinoFake::getContext()._Stream;
     Stream* pStream(streamFake.getFake());
     std::stringstream stream;
-    setupNativeFake(streamFake, stream);
+    ArduinoNativeFake::setupNativeFake(streamFake, stream);
 
     // Default
     reset(stream, "");
@@ -156,7 +156,7 @@ static void test_parseFloat(void)
     auto &streamFake = SimpleArduinoFake::getContext()._Stream;
     Stream* pStream(streamFake.getFake());
     std::stringstream stream;
-    setupNativeFake(streamFake, stream);
+    ArduinoNativeFake::setupNativeFake(streamFake, stream);
 
     // Default
     reset(stream, "");
@@ -206,7 +206,7 @@ static void test_readBytes(void)
     auto &streamFake = SimpleArduinoFake::getContext()._Stream;
     Stream* pStream(streamFake.getFake());
     std::stringstream stream;
-    setupNativeFake(streamFake, stream);
+    ArduinoNativeFake::setupNativeFake(streamFake, stream);
 
     char buffer[256];
     TEST_ASSERT_EQUAL(0U, pStream->readBytes(buffer, sizeof(buffer)));
@@ -227,7 +227,7 @@ static void test_readBytesUntil(void)
     auto &streamFake = SimpleArduinoFake::getContext()._Stream;
     Stream* pStream(streamFake.getFake());
     std::stringstream stream;
-    setupNativeFake(streamFake, stream);
+    ArduinoNativeFake::setupNativeFake(streamFake, stream);
 
     char buffer[256];
     TEST_ASSERT_EQUAL(0U, pStream->readBytesUntil('a', buffer, sizeof(buffer)));
@@ -248,7 +248,7 @@ static void test_readString(void)
     auto &streamFake = SimpleArduinoFake::getContext()._Stream;
     Stream* pStream(streamFake.getFake());
     std::stringstream stream;
-    setupNativeFake(streamFake, stream);
+    ArduinoNativeFake::setupNativeFake(streamFake, stream);
 
     {
         String s = pStream->readString();
@@ -273,7 +273,7 @@ static void test_readStringUntil(void)
     auto &streamFake = SimpleArduinoFake::getContext()._Stream;
     Stream* pStream(streamFake.getFake());
     std::stringstream stream;
-    setupNativeFake(streamFake, stream);
+    ArduinoNativeFake::setupNativeFake(streamFake, stream);
 
     {
         String s = pStream->readStringUntil(' ');

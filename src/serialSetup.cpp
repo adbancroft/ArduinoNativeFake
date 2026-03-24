@@ -1,6 +1,9 @@
 #include <map>
 #include "serialSetup.h"
 
+namespace ArduinoNativeFake
+{
+
 using namespace fakeit;
 
 void setupNativeFake(fakeit::Mock<Serial_> &mock, std::ostream &oStream, std::istream &iStream)
@@ -61,4 +64,5 @@ void setupNativeFake(fakeit::Mock<Serial_> &mock, std::ostream &oStream, std::is
 
     When(Method(mock, dtr)).AlwaysReturn(true);
     When(Method(mock, rts)).AlwaysReturn(true);
+}
 }

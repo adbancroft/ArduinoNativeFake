@@ -2,6 +2,12 @@
 #include <iomanip>
 #include "printSetup.h"
 
+namespace ArduinoNativeFake
+{
+
+namespace PrintDetail
+{
+
 using namespace fakeit;
 
 void setupWriteMethod(Mock<Print> &mock, std::ostream &outputStream) {
@@ -129,4 +135,6 @@ void setupPrintlnMethod(Mock<Print> &mock, std::ostream &outputStream) {
         outputStream << '\n';
         return 1U;
     });
+}
+}
 }

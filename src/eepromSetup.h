@@ -1,6 +1,9 @@
 #include <SimpleArduinoFake.h>
 #include <iterator>
 
+namespace ArduinoNativeFake
+{
+
  /**
   * @brief Setup an the EEPROM mock with a memory backing store
   * 
@@ -10,9 +13,7 @@
   * @param end Iterator to the end of the address space
   */
 template<class Iterator>
-static inline void setupNativeFake(   fakeit::Mock<EEPROMClass> &mock, 
-                                        Iterator begin, 
-                                        Iterator end) {
+static inline void setupNativeFake(fakeit::Mock<EEPROMClass> &mock, Iterator begin, Iterator end) {
     static_assert(
         std::is_same<std::random_access_iterator_tag,
                         typename std::iterator_traits<Iterator>::iterator_category>::value,
@@ -36,4 +37,6 @@ static inline void setupNativeFake(   fakeit::Mock<EEPROMClass> &mock,
     When(Method(mock, length)).AlwaysDo(
             [begin, end]() -> uint16_t { return end - begin; }
     );
+}
+
 }

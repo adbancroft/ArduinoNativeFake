@@ -4,6 +4,9 @@
 #include <map>
 #include "functionSetup.h"
 
+namespace ArduinoNativeFake
+{
+
 using namespace fakeit;
 
 void setupNativeFake(fakeit::Mock<SimpleArduinoFake::details::FunctionFake> &mock)
@@ -170,4 +173,6 @@ void setupNativeFake(fakeit::Mock<SimpleArduinoFake::details::FunctionFake> &moc
         }
         return &result.first->second[pin]; 
     });
+}
+
 }
