@@ -1,6 +1,7 @@
+#pragma once
 #include <bitset>
 #include <iomanip>
-#include "printSetup.h"
+#include <SimpleArduinoFake.h>
 
 namespace ArduinoNativeFake
 {
@@ -10,7 +11,8 @@ namespace PrintDetail
 
 using namespace fakeit;
 
-void setupWriteMethod(Mock<Print> &mock, std::ostream &outputStream) {
+template <class TFake>
+static inline void setupWriteMethod(Mock<TFake> &mock, std::ostream &outputStream) {
     When(Method(mock, availableForWrite)).AlwaysReturn(0);
 
     When(OverloadedMethod(mock, write, size_t(uint8_t))).AlwaysDo([&outputStream](uint8_t c) {
@@ -29,9 +31,8 @@ void setupWriteMethod(Mock<Print> &mock, std::ostream &outputStream) {
     });
 }
 
-
 template<typename T>
-std::string toString(const T& value, int base) {
+static inline std::string toString(const T& value, int base) {
     if (base == HEX) {
         std::ostringstream oss;
         oss << std::uppercase << std::hex << value;
@@ -52,7 +53,8 @@ std::string toString(const T& value, int base) {
     }
 }
 
-void setupPrintMethod(Mock<Print> &mock, std::ostream &outputStream) {
+template <class TFake>
+static inline void setupPrintMethod(Mock<TFake> &mock, std::ostream &outputStream) {
     When(OverloadedMethod(mock, print, size_t(const __FlashStringHelper *))).AlwaysDo([&mock](const __FlashStringHelper *ifsh) {
         return mock.get().print(reinterpret_cast<const char *>(ifsh));
     });
@@ -93,11 +95,12 @@ void setupPrintMethod(Mock<Print> &mock, std::ostream &outputStream) {
         return str.length();
     });
     When(OverloadedMethod(mock, print, size_t(const Printable&))).AlwaysDo([&mock](const Printable& x){
-        return x.printTo(*SimpleArduinoFake::getContext()._Print.getFake());
+        return x.printTo(mock.get());
     });
 }
 
-void setupPrintlnMethod(Mock<Print> &mock, std::ostream &outputStream) {
+template <class TFake>
+static inline void setupPrintlnMethod(Mock<TFake> &mock, std::ostream &outputStream) {
     When(OverloadedMethod(mock, println, size_t(const __FlashStringHelper *))).AlwaysDo([&mock, &outputStream](const __FlashStringHelper *ifsh){
         return mock.get().print(ifsh) + mock.get().println();
     });
