@@ -1,4 +1,4 @@
-#include <ArduinoFake.h>
+#include <SimpleArduinoFake.h>
 #include <iterator>
 
  /**
@@ -10,7 +10,7 @@
   * @param end Iterator to the end of the address space
   */
 template<class Iterator>
-static inline void setupNativeFake(   fakeit::Mock<EEPROMFake> &mock, 
+static inline void setupNativeFake(   fakeit::Mock<EEPROMClass> &mock, 
                                         Iterator begin, 
                                         Iterator end) {
     static_assert(

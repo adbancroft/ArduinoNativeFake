@@ -1,7 +1,7 @@
 #include <map>
 #include <algorithm>
-#include "stream.h"
-#include "print.h"
+#include "streamSetup.h"
+#include "printSetup.h"
 
 using namespace fakeit;
 
@@ -124,14 +124,14 @@ static std::string removeIgnoreChar(const std::string& s, char c) {
     return s;
 }
 
-void setupNativeFake(fakeit::Mock<StreamFake> &mock, std::istream &stream)
+void setupNativeFake(fakeit::Mock<Stream> &mock, std::istream &stream)
 {
-    // These are pure virtual in Stream, so don't implement here (they'll be implemented in fakes derived from StreamFake)
+    // These are pure virtual in Stream, so don't implement here (they'll be implemented in fakes derived from Stream)
     // virtual int available() = 0;
     // virtual int read() = 0;
     // virtual int peek() = 0;
 
-    static std::map<StreamFake*, unsigned long> timeOuts;
+    static std::map<Stream*, unsigned long> timeOuts;
     When(Method(mock, setTimeout)).AlwaysDo([&mock](unsigned long timeOut) {
         timeOuts[&mock.get()] = timeOut;
     });
@@ -139,6 +139,9 @@ void setupNativeFake(fakeit::Mock<StreamFake> &mock, std::istream &stream)
         return timeOuts[&mock.get()];
     });
 
+    When(OverloadedMethod(mock, find, bool(char))).AlwaysDo([&mock](char target){
+        return mock.get().find(&target, 1U);
+    });
     When(OverloadedMethod(mock, find, bool(const char*))).AlwaysDo([&mock](const char *target){
         return mock.get().find(target, strlen(target));
     });

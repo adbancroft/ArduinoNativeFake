@@ -1,11 +1,11 @@
 #include <map>
-#include "serial.h"
+#include "serialSetup.h"
 
 using namespace fakeit;
 
-void setupNativeFake(fakeit::Mock<SerialFake> &mock, std::ostream &oStream, std::istream &iStream)
+void setupNativeFake(fakeit::Mock<Serial_> &mock, std::ostream &oStream, std::istream &iStream)
 {
-    static std::map<SerialFake*, unsigned long> baudRates;
+    static std::map<Serial_*, unsigned long> baudRates;
     When(OverloadedMethod(mock, begin, void(unsigned long))).AlwaysDo([&mock](unsigned long rate){
         baudRates[&mock.get()] = rate;
     });

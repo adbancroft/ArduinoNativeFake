@@ -1,10 +1,10 @@
 #include <bitset>
 #include <iomanip>
-#include "print.h"
+#include "printSetup.h"
 
 using namespace fakeit;
 
-void setupWriteMethod(Mock<PrintFake> &mock, std::ostream &outputStream) {
+void setupWriteMethod(Mock<Print> &mock, std::ostream &outputStream) {
     When(Method(mock, availableForWrite)).AlwaysReturn(0);
 
     When(OverloadedMethod(mock, write, size_t(uint8_t))).AlwaysDo([&outputStream](uint8_t c) {
@@ -46,7 +46,7 @@ std::string toString(const T& value, int base) {
     }
 }
 
-void setupPrintMethod(Mock<PrintFake> &mock, std::ostream &outputStream) {
+void setupPrintMethod(Mock<Print> &mock, std::ostream &outputStream) {
     When(OverloadedMethod(mock, print, size_t(const __FlashStringHelper *))).AlwaysDo([&mock](const __FlashStringHelper *ifsh) {
         return mock.get().print(reinterpret_cast<const char *>(ifsh));
     });
@@ -87,11 +87,11 @@ void setupPrintMethod(Mock<PrintFake> &mock, std::ostream &outputStream) {
         return str.length();
     });
     When(OverloadedMethod(mock, print, size_t(const Printable&))).AlwaysDo([&mock](const Printable& x){
-        return x.printTo(*ArduinoFakeMock(Print));
+        return x.printTo(*SimpleArduinoFake::getContext()._Print.getFake());
     });
 }
 
-void setupPrintlnMethod(Mock<PrintFake> &mock, std::ostream &outputStream) {
+void setupPrintlnMethod(Mock<Print> &mock, std::ostream &outputStream) {
     When(OverloadedMethod(mock, println, size_t(const __FlashStringHelper *))).AlwaysDo([&mock, &outputStream](const __FlashStringHelper *ifsh){
         return mock.get().print(ifsh) + mock.get().println();
     });

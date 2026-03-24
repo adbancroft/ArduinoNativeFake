@@ -1,10 +1,10 @@
 // clang-format off
-#include <ArduinoFake.h>
+#include <SimpleArduinoFake.h>
 #include <unity.h>
 
 void setUp(void)
 {
-    ArduinoFakeReset();
+    SimpleArduinoFake::getContext().Reset();
 }
 
 void tearDown(void) // Not called, but needed for unity
