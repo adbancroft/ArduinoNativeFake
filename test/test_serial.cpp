@@ -1,49 +1,49 @@
 #include <iostream>
-#include <ArduinoFake.h>
+#include <SimpleArduinoFake.h>
 #include <unity.h>
 #include "unity_filename_helper.h"
 #include "stringstream_helpers.h"
-#include "serial.h"
+#include "serialSetup.h"
 
 using namespace fakeit;
 
 static void test_stubs(void)
 {
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Serial), stream, stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Serial, stream, stream);
 
     Serial.begin(9600);
     TEST_ASSERT_EQUAL(9600, Serial.baud());
-    Verify(OverloadedMethod(ArduinoFake(Serial), begin, void(unsigned long))).AtLeastOnce();
+    Verify(OverloadedMethod(SimpleArduinoFake::getContext()._Serial, begin, void(unsigned long))).AtLeastOnce();
     Serial.begin(9600, 2U);
-    Verify(OverloadedMethod(ArduinoFake(Serial), begin, void(unsigned long, uint8_t))).AtLeastOnce();
+    Verify(OverloadedMethod(SimpleArduinoFake::getContext()._Serial, begin, void(unsigned long, uint8_t))).AtLeastOnce();
     Serial.end();
-    Verify(Method(ArduinoFake(Serial), end)).AtLeastOnce();
+    Verify(Method(SimpleArduinoFake::getContext()._Serial, end)).AtLeastOnce();
     Serial.flush();
-    Verify(Method(ArduinoFake(Serial), flush)).AtLeastOnce();
+    Verify(Method(SimpleArduinoFake::getContext()._Serial, flush)).AtLeastOnce();
     TEST_ASSERT_EQUAL(0, Serial.readBreak());
-    Verify(Method(ArduinoFake(Serial), readBreak)).AtLeastOnce();
+    Verify(Method(SimpleArduinoFake::getContext()._Serial, readBreak)).AtLeastOnce();
 
     TEST_ASSERT_EQUAL(Serial_::ONE_STOP_BIT, Serial.stopbits());
-    Verify(Method(ArduinoFake(Serial), stopbits)).AtLeastOnce();
+    Verify(Method(SimpleArduinoFake::getContext()._Serial, stopbits)).AtLeastOnce();
 
     TEST_ASSERT_EQUAL(Serial_::EVEN_PARITY, Serial.paritytype());
-    Verify(Method(ArduinoFake(Serial), paritytype)).AtLeastOnce();
+    Verify(Method(SimpleArduinoFake::getContext()._Serial, paritytype)).AtLeastOnce();
 
     TEST_ASSERT_EQUAL(8, Serial.numbits());
-    Verify(Method(ArduinoFake(Serial), numbits)).AtLeastOnce();
+    Verify(Method(SimpleArduinoFake::getContext()._Serial, numbits)).AtLeastOnce();
 
     TEST_ASSERT_EQUAL(true, Serial.dtr());
-    Verify(Method(ArduinoFake(Serial), dtr)).AtLeastOnce();
+    Verify(Method(SimpleArduinoFake::getContext()._Serial, dtr)).AtLeastOnce();
 
     TEST_ASSERT_EQUAL(true, Serial.rts());
-    Verify(Method(ArduinoFake(Serial), rts)).AtLeastOnce();    
+    Verify(Method(SimpleArduinoFake::getContext()._Serial, rts)).AtLeastOnce();    
 }
 
 static void test_availableForWrite(void)
 {
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Serial), stream, stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Serial, stream, stream);
 
     TEST_ASSERT_EQUAL(0, Serial.availableForWrite());
 
@@ -54,7 +54,7 @@ static void test_availableForWrite(void)
 static void test_available(void)
 {
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Serial), stream, stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Serial, stream, stream);
 
     TEST_ASSERT_EQUAL(0, Serial.available());
 
@@ -65,7 +65,7 @@ static void test_available(void)
 static void test_peek(void)
 {
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Serial), stream, stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Serial, stream, stream);
 
     TEST_ASSERT_EQUAL(-1, Serial.peek());
 
@@ -78,7 +78,7 @@ static void test_peek(void)
 static void test_read(void)
 {
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Serial), stream, stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Serial, stream, stream);
 
     TEST_ASSERT_EQUAL(-1, Serial.read());
 
@@ -91,7 +91,7 @@ static void test_read(void)
 static void test_write(void)
 {
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Serial), stream, stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Serial, stream, stream);
 
     TEST_ASSERT_EQUAL(1, Serial.write('a'));
     TEST_ASSERT_EQUAL('a', stream.str()[0]);

@@ -2,11 +2,11 @@
 #include <thread>
 #include <random>
 #include <map>
-#include "function.h"
+#include "functionSetup.h"
 
 using namespace fakeit;
 
-void setupNativeFake(fakeit::Mock<FunctionFake> &mock)
+void setupNativeFake(fakeit::Mock<SimpleArduinoFake::details::FunctionFake> &mock)
 {
     // Do nothing - stub to prevent crashes
     When(Method(mock, init)).AlwaysReturn();
@@ -33,7 +33,7 @@ void setupNativeFake(fakeit::Mock<FunctionFake> &mock)
 
     // Should be overridden per test - but stub to prevent crashes
     // Just return the last value set.
-    using map_uint8_uint8_t = std::map<FunctionFake*, std::map<uint8_t, uint8_t>>;
+    using map_uint8_uint8_t = std::map<SimpleArduinoFake::details::FunctionFake*, std::map<uint8_t, uint8_t>>;
     static map_uint8_uint8_t pinValues;
     When(Method(mock, digitalWrite)).AlwaysDo([&mock](uint8_t pin, uint8_t value) {
         pinValues[&mock.get()][pin] = value;
@@ -110,7 +110,7 @@ void setupNativeFake(fakeit::Mock<FunctionFake> &mock)
     When(Method(mock, tone)).AlwaysReturn();
     When(Method(mock, noTone)).AlwaysReturn();
 
-    static std::map<FunctionFake*, std::mt19937> mockToRandom;
+    static std::map<SimpleArduinoFake::details::FunctionFake*, std::mt19937> mockToRandom;
     When(OverloadedMethod(mock, random, long(long))).AlwaysDo([](long howBig) {
         return random(0, howBig);
     });

@@ -1,18 +1,18 @@
 #include <random>
 #include <iostream>
-#include <ArduinoFake.h>
+#include <SimpleArduinoFake.h>
 #include <unity.h>
 #include "unity_filename_helper.h"
-#include "stream.h"
+#include "streamSetup.h"
 #include "stringstream_helpers.h"
 
 using namespace fakeit;
 
 static void test_timeout_property(void)
 {
-    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
+    Stream* pStream(SimpleArduinoFake::getContext()._Stream.getFake());
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Stream), stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Stream, stream);
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -25,9 +25,9 @@ static void test_timeout_property(void)
 
 static void test_find(void)
 {
-    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Stream), stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Stream, stream);
+    Stream* pStream(SimpleArduinoFake::getContext()._Stream.getFake());
 
     TEST_ASSERT_FALSE(pStream->find('c'));
     reset(stream, "aaaaaaaaa");
@@ -66,9 +66,9 @@ static void test_find(void)
  
 static void test_findUntil(void)
 {
-    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
+    Stream* pStream(SimpleArduinoFake::getContext()._Stream.getFake());
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Stream), stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Stream, stream);
 
     reset(stream, "");
     TEST_ASSERT_FALSE(pStream->findUntil("xxxx", "a"));
@@ -99,9 +99,9 @@ static void test_findUntil(void)
 
 static void test_parseInt(void)
 {
-    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
+    Stream* pStream(SimpleArduinoFake::getContext()._Stream.getFake());
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Stream), stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Stream, stream);
 
     // Default
     reset(stream, "");
@@ -149,9 +149,9 @@ static void test_parseInt(void)
 
 static void test_parseFloat(void)
 {
-    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
+    Stream* pStream(SimpleArduinoFake::getContext()._Stream.getFake());
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Stream), stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Stream, stream);
 
     // Default
     reset(stream, "");
@@ -198,9 +198,9 @@ static void test_parseFloat(void)
 
 static void test_readBytes(void)
 {
-    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
+    Stream* pStream(SimpleArduinoFake::getContext()._Stream.getFake());
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Stream), stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Stream, stream);
 
     char buffer[256];
     TEST_ASSERT_EQUAL(0U, pStream->readBytes(buffer, sizeof(buffer)));
@@ -218,9 +218,9 @@ static void test_readBytes(void)
 
 static void test_readBytesUntil(void)
 {
-    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
+    Stream* pStream(SimpleArduinoFake::getContext()._Stream.getFake());
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Stream), stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Stream, stream);
 
     char buffer[256];
     TEST_ASSERT_EQUAL(0U, pStream->readBytesUntil('a', buffer, sizeof(buffer)));
@@ -238,9 +238,9 @@ static void test_readBytesUntil(void)
 
 static void test_readString(void)
 {
-    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
+    Stream* pStream(SimpleArduinoFake::getContext()._Stream.getFake());
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Stream), stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Stream, stream);
 
     {
         String s = pStream->readString();
@@ -262,9 +262,9 @@ static void test_readString(void)
 
 static void test_readStringUntil(void)
 {
-    std::shared_ptr<Stream> pStream(ArduinoFakeMock(Stream));
+    Stream* pStream(SimpleArduinoFake::getContext()._Stream.getFake());
     std::stringstream stream;
-    setupNativeFake(ArduinoFake(Stream), stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Stream, stream);
 
     {
         String s = pStream->readStringUntil(' ');

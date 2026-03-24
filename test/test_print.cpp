@@ -1,8 +1,8 @@
 #include <iostream>
-#include <ArduinoFake.h>
+#include <SimpleArduinoFake.h>
 #include <unity.h>
 #include "unity_filename_helper.h"
-#include "print.h"
+#include "printSetup.h"
 
 using namespace fakeit;
 
@@ -16,9 +16,9 @@ static void assert_string_size(size_t actualSize, const char *expectedStr, std::
 
 static void test_write(void)
 {
-    std::shared_ptr<Print> print(ArduinoFakeMock(Print));
+    Print* print(SimpleArduinoFake::getContext()._Print.getFake());
     std::ostringstream stream;
-    setupNativeFake(ArduinoFake(Print), stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Print, stream);
 
     TEST_ASSERT_EQUAL(0, print->availableForWrite());
 
@@ -53,19 +53,19 @@ static void test_print_bases(Print* print, std::ostringstream &stream)
 
 static void test_print(void)
 {
-    std::shared_ptr<Print> print(ArduinoFakeMock(Print));
+    Print* print(SimpleArduinoFake::getContext()._Print.getFake());
     std::ostringstream stream;
-    setupNativeFake(ArduinoFake(Print), stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Print, stream);
 
     assert_string_size(print->print(F("test")), "test", stream);
     assert_string_size(print->print('a'), "a", stream);
     assert_string_size(print->print(String("abc")), "abc", stream);
     assert_string_size(print->print("abc"), "abc", stream);
 
-    test_print_bases<int>(print.get(), stream);
-    test_print_bases<unsigned int>(print.get(), stream);
-    test_print_bases<long>(print.get(), stream);
-    test_print_bases<unsigned long>(print.get(), stream);
+    test_print_bases<int>(print, stream);
+    test_print_bases<unsigned int>(print, stream);
+    test_print_bases<long>(print, stream);
+    test_print_bases<unsigned long>(print, stream);
 
     assert_string_size(print->print(12.34567), "12.35", stream);
     assert_string_size(print->print(12.34567, 10), "12.3456700000", stream);
@@ -87,19 +87,19 @@ static void test_println_bases(Print* print, std::ostringstream &stream)
 
 static void test_println(void)
 {
-    std::shared_ptr<Print> print(ArduinoFakeMock(Print));
+    Print* print(SimpleArduinoFake::getContext()._Print.getFake());
     std::ostringstream stream;
-    setupNativeFake(ArduinoFake(Print), stream);
+    setupNativeFake(SimpleArduinoFake::getContext()._Print, stream);
 
     assert_string_size(print->println(F("test")), "test\n", stream);
     assert_string_size(print->println('a'), "a\n", stream);
     assert_string_size(print->println(String("abc")), "abc\n", stream);
     assert_string_size(print->println("abc"), "abc\n", stream);
 
-    test_println_bases<int>(print.get(), stream);
-    test_println_bases<unsigned int>(print.get(), stream);
-    test_println_bases<long>(print.get(), stream);
-    test_println_bases<unsigned long>(print.get(), stream);
+    test_println_bases<int>(print, stream);
+    test_println_bases<unsigned int>(print, stream);
+    test_println_bases<long>(print, stream);
+    test_println_bases<unsigned long>(print, stream);
 
     assert_string_size(print->println(12.34567), "12.35\n", stream);
     assert_string_size(print->println(12.34567, 10), "12.3456700000\n", stream);
