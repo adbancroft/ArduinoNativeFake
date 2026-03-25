@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <SimpleArduinoFake.h>
 
-
 namespace ArduinoNativeFake
 {
 

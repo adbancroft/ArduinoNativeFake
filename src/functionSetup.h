@@ -1,3 +1,4 @@
+#pragma once
 #include <SimpleArduinoFake.h>
 
 namespace ArduinoNativeFake
