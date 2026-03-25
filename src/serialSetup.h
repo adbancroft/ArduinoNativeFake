@@ -2,6 +2,7 @@
 #include <type_traits>
 #include <map>
 #include <SimpleArduinoFake.h>
+#include "streamSetup.h"
 
 namespace ArduinoNativeFake
 {
@@ -11,6 +12,9 @@ static inline void setupSerialFake(fakeit::Mock<TFake> &mock, std::ostream &oStr
 {
     static_assert(std::is_base_of<Serial_, TFake>::value, "Needs to be a class derived from Serial_");
     
+    // Serial is-a Stream
+    setupStreamFake(mock, oStream, iStream);
+
     using namespace fakeit;
     extern std::map<Serial_*, unsigned long> baudRates;
     When(OverloadedMethod(mock, begin, void(unsigned long))).AlwaysDo([&mock](unsigned long rate){
