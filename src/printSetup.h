@@ -1,11 +1,13 @@
-#include <SimpleArduinoFake.h>
+#include <type_traits>
+#include "printSetupDetail.hpp"
 
-void setupWriteMethod(fakeit::Mock<Print> &mock, std::ostream &outputStream);
-void setupPrintMethod(fakeit::Mock<Print> &mock, std::ostream &outputStream);
-void setupPrintlnMethod(fakeit::Mock<Print> &mock, std::ostream &outputStream);
-
-static inline void setupNativeFake(fakeit::Mock<Print> &mock, std::ostream &outputStream) {
-    setupWriteMethod(mock, outputStream);
-    setupPrintMethod(mock, outputStream);
-    setupPrintlnMethod(mock, outputStream);
+namespace ArduinoNativeFake
+{
+template <class TFake>
+static inline void setupPrintFake(fakeit::Mock<TFake> &mock, std::ostream &outputStream) {
+    static_assert(std::is_base_of<Print, TFake>::value, "Needs to be a class derived from Print");
+    PrintDetail::setupWriteMethod(mock, outputStream);
+    PrintDetail::setupPrintMethod(mock, outputStream);
+    PrintDetail::setupPrintlnMethod(mock, outputStream);
+}
 }

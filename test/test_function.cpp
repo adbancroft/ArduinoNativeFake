@@ -10,7 +10,7 @@ static void nullInterrupt(void) {}
 static void test_stubs(void)
 {
     auto &functionFake = SimpleArduinoFake::getContext()._Function;
-    setupNativeFake(functionFake);
+    ArduinoNativeFake::setupNativeFake(functionFake);
 
     // These are all stubbed to do nothing
     init();
@@ -43,7 +43,7 @@ static void test_stubs(void)
 
 static void test_millis(void)
 {
-    setupNativeFake(SimpleArduinoFake::getContext()._Function);
+    ArduinoNativeFake::setupNativeFake(SimpleArduinoFake::getContext()._Function);
 
     unsigned long initialValue = millis();
     unsigned long lastValue = initialValue;
@@ -57,7 +57,7 @@ static void test_millis(void)
 
 static void test_micros(void)
 {
-    setupNativeFake(SimpleArduinoFake::getContext()._Function);
+    ArduinoNativeFake::setupNativeFake(SimpleArduinoFake::getContext()._Function);
 
     unsigned long initialValue = micros();
     unsigned long lastValue = initialValue;
@@ -71,7 +71,7 @@ static void test_micros(void)
 
 static void test_delay(void)
 {
-    setupNativeFake(SimpleArduinoFake::getContext()._Function);
+    ArduinoNativeFake::setupNativeFake(SimpleArduinoFake::getContext()._Function);
 
     unsigned long initialValue = millis();
     delay(100);
@@ -80,7 +80,7 @@ static void test_delay(void)
 
 static void test_delayMicroseconds(void)
 {
-    setupNativeFake(SimpleArduinoFake::getContext()._Function);
+    ArduinoNativeFake::setupNativeFake(SimpleArduinoFake::getContext()._Function);
 
     unsigned long initialValue = micros();
     delayMicroseconds(750);
@@ -89,21 +89,21 @@ static void test_delayMicroseconds(void)
 
 static void test_shiftOut(void)
 {
-    setupNativeFake(SimpleArduinoFake::getContext()._Function);
+    ArduinoNativeFake::setupNativeFake(SimpleArduinoFake::getContext()._Function);
 
     shiftOut(8, 11, LSBFIRST, 127);
 }
 
 static void test_shiftIn(void)
 {
-    setupNativeFake(SimpleArduinoFake::getContext()._Function);
+    ArduinoNativeFake::setupNativeFake(SimpleArduinoFake::getContext()._Function);
 
     TEST_ASSERT_EQUAL(0, shiftIn(8, 11, LSBFIRST));
 }
 
 static void test_random(void)
 {
-    setupNativeFake(SimpleArduinoFake::getContext()._Function);
+    ArduinoNativeFake::setupNativeFake(SimpleArduinoFake::getContext()._Function);
 
     TEST_ASSERT_INT_WITHIN(1L, 0L, random(1L));
     TEST_ASSERT_INT_WITHIN(1L, 0L, random(0L, 1L));
@@ -125,7 +125,7 @@ static void test_random(void)
 
 static void test_map(void)
 {
-    setupNativeFake(SimpleArduinoFake::getContext()._Function);
+    ArduinoNativeFake::setupNativeFake(SimpleArduinoFake::getContext()._Function);
 
     TEST_ASSERT_EQUAL(0, map(0, 0, 1, 0, 1));
     TEST_ASSERT_EQUAL(1, map(1, 0, 1, 0, 1));
@@ -134,7 +134,7 @@ static void test_map(void)
 
 static void test_pinport(void)
 {
-    setupNativeFake(SimpleArduinoFake::getContext()._Function);
+    ArduinoNativeFake::setupNativeFake(SimpleArduinoFake::getContext()._Function);
 
     uint8_t pin = (uint8_t)random(UINT8_MAX);
     TEST_ASSERT_EQUAL(pin, digitalPinToPort(pin));
@@ -157,7 +157,7 @@ static void test_pinport(void)
 static void test_pin_readwrite(void)
 {
     auto &functionFake = SimpleArduinoFake::getContext()._Function;
-    setupNativeFake(functionFake);
+    ArduinoNativeFake::setupNativeFake(functionFake);
 
     TEST_ASSERT_EQUAL(LOW, digitalRead(3));
     Verify(Method(functionFake, digitalRead)).AtLeastOnce();
@@ -207,7 +207,7 @@ static uint8_t getPinMode(uint8_t pin)
 static void test_pinMode(void)
 {
     auto &functionFake = SimpleArduinoFake::getContext()._Function;
-    setupNativeFake(functionFake);
+    ArduinoNativeFake::setupNativeFake(functionFake);
     static constexpr uint8_t PA = 1;
     static constexpr uint8_t PB = 2;
     static constexpr uint8_t PC = 3;
