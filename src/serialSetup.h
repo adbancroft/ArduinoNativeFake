@@ -28,13 +28,6 @@ static inline void setupSerialFake(fakeit::Mock<TFake> &mock, std::ostream &oStr
         mock.get().flush();
     });
 
-    When(Method(mock, available)).AlwaysDo([&iStream]() {
-        std::istream::pos_type original = iStream.tellg();
-        iStream.seekg(0, std::ios::end);
-        std::istream::pos_type available = iStream.tellg();
-        iStream.seekg(original);
-        return (int)available;
-    });
     When(Method(mock, peek)).AlwaysDo([&iStream]() {
         return (int)iStream.peek();
     });

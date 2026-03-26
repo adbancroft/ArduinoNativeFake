@@ -293,6 +293,18 @@ static void test_readStringUntil(void)
     }    
 }
 
+static void test_available(void)
+{
+    auto &streamFake = SimpleArduinoFake::getContext()._Stream;
+    Stream* pStream(streamFake.getFake());
+    std::stringstream stream;
+    ArduinoNativeFake::setupStreamFake(streamFake, stream, stream);
+
+    TEST_ASSERT_EQUAL(0, pStream->available());
+
+    reset(stream, "123456789");
+    TEST_ASSERT_EQUAL(9, pStream->available());
+}
 
 void run_stream_tests()
 {
@@ -307,4 +319,5 @@ void run_stream_tests()
     RUN_TEST(test_readBytesUntil);
     RUN_TEST(test_readString);
     RUN_TEST(test_readStringUntil);
-}
+    RUN_TEST(test_available);
+ }

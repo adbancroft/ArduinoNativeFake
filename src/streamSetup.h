@@ -16,11 +16,18 @@ static inline void setupStreamFake(fakeit::Mock<TFake> &mock, std::ostream &oStr
     setupPrintFake(mock, oStream);
 
     // These are pure virtual in Stream, so don't implement here (they'll be implemented in fakes derived from Stream)
-    // virtual int available() = 0;
     // virtual int read() = 0;
     // virtual int peek() = 0;
 
     using namespace fakeit;
+    
+    When(Method(mock, available)).AlwaysDo([&iStream]() {
+        std::istream::pos_type original = iStream.tellg();
+        iStream.seekg(0, std::ios::end);
+        std::istream::pos_type available = iStream.tellg();
+        iStream.seekg(original);
+        return (int)available;
+    });
 
     // This can't be declared as a static variable here, since this is a template.
     extern std::map<Stream*, unsigned long> timeOuts;
