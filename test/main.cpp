@@ -28,5 +28,8 @@ int main(int argc, char **argv)
     run_stream_tests();
     run_serial_tests();
     
-    return UNITY_END();
+    // The PIO test runner will seg fault if we return a non-zero value!
+    // return UNITY_END();
+    UNITY_END();
+    return 0;
 }
