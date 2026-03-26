@@ -14,6 +14,9 @@ using namespace fakeit;
 template <class TFake>
 static inline void setupWriteMethod(Mock<TFake> &mock, std::ostream &outputStream) {
     When(Method(mock, availableForWrite)).AlwaysDo([&outputStream]() {
+        if (&outputStream==&std::cout) {
+            return 64; // Arbitrary number
+        }
         std::ostream::pos_type original = outputStream.tellp();
         outputStream.seekp(0, std::ios::end);
         std::ostream::pos_type available = outputStream.tellp();

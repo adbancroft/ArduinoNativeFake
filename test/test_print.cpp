@@ -43,6 +43,16 @@ static void test_availableForWrite(void)
     TEST_ASSERT_EQUAL(9, print->availableForWrite());
 }
 
+
+static void test_availableForWrite_cout(void)
+{
+    auto &printFake = SimpleArduinoFake::getContext()._Print;
+    Print* print(printFake.getFake());
+    ArduinoNativeFake::setupPrintFake(printFake, std::cout);
+
+    TEST_ASSERT_NOT_EQUAL(0, print->availableForWrite());
+}
+
 static std::string leftPad(std::string str, size_t targetLength, char paddingChar) {
     if (str.length() < targetLength) {
         size_t paddingNeeded = targetLength - str.length();
@@ -131,6 +141,7 @@ void run_print_tests()
 
     RUN_TEST(test_write);
     RUN_TEST(test_availableForWrite);
+    RUN_TEST(test_availableForWrite_cout);
     RUN_TEST(test_print);
     RUN_TEST(test_println);
 }
