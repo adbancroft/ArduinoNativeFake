@@ -41,17 +41,6 @@ static void test_stubs(void)
     Verify(Method(serialFake, rts)).AtLeastOnce();    
 }
 
-static void test_availableForWrite(void)
-{
-    std::stringstream stream;
-    ArduinoNativeFake::setupSerialFake(SimpleArduinoFake::getContext()._Serial, stream, stream);
-
-    TEST_ASSERT_EQUAL(0, Serial.availableForWrite());
-
-    reset(stream, "123456789");
-    TEST_ASSERT_EQUAL(9, Serial.availableForWrite());
-}
-
 static void test_available(void)
 {
     std::stringstream stream;
@@ -106,7 +95,6 @@ void run_serial_tests()
     unity_filename_helper_t _ufname_helper(__FILE__);
 
     RUN_TEST(test_stubs);
-    RUN_TEST(test_availableForWrite);
     RUN_TEST(test_available);
     RUN_TEST(test_peek);
     RUN_TEST(test_read);

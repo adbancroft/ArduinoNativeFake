@@ -3,6 +3,7 @@
 #include <unity.h>
 #include "unity_filename_helper.h"
 #include "printSetup.h"
+#include "stringstream_helpers.h"
 
 using namespace fakeit;
 
@@ -27,6 +28,19 @@ static void test_write(void)
 
     const uint8_t buffer[] = { 'a', 'b', 'c'};
     assert_string_size(print->write(buffer, sizeof(buffer)), "abc", stream);
+}
+
+static void test_availableForWrite(void)
+{
+    auto &printFake = SimpleArduinoFake::getContext()._Print;
+    Print* print(printFake.getFake());
+    std::stringstream stream;
+    ArduinoNativeFake::setupPrintFake(printFake, stream);
+
+    TEST_ASSERT_EQUAL(0, print->availableForWrite());
+
+    reset(stream, "123456789");
+    TEST_ASSERT_EQUAL(9, print->availableForWrite());
 }
 
 static std::string leftPad(std::string str, size_t targetLength, char paddingChar) {
@@ -116,6 +130,7 @@ void run_print_tests()
     unity_filename_helper_t _ufname_helper(__FILE__);
 
     RUN_TEST(test_write);
+    RUN_TEST(test_availableForWrite);
     RUN_TEST(test_print);
     RUN_TEST(test_println);
 }

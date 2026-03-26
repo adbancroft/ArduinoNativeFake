@@ -13,7 +13,13 @@ using namespace fakeit;
 
 template <class TFake>
 static inline void setupWriteMethod(Mock<TFake> &mock, std::ostream &outputStream) {
-    When(Method(mock, availableForWrite)).AlwaysReturn(0);
+    When(Method(mock, availableForWrite)).AlwaysDo([&outputStream]() {
+        std::ostream::pos_type original = outputStream.tellp();
+        outputStream.seekp(0, std::ios::end);
+        std::ostream::pos_type available = outputStream.tellp();
+        outputStream.seekp(original);
+        return (int)available;
+    });
 
     When(OverloadedMethod(mock, write, size_t(uint8_t))).AlwaysDo([&outputStream](uint8_t c) {
         outputStream.put((char)c);
