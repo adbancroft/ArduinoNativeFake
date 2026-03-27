@@ -268,6 +268,21 @@ static void test_readString(void)
     }    
 }
 
+static void test_readString_cin(void)
+{
+    auto &streamFake = SimpleArduinoFake::getContext()._Stream;
+    Stream* pStream(streamFake.getFake());
+    std::stringstream stream;
+    ArduinoNativeFake::setupStreamFake(streamFake, stream, std::cin);
+
+    std::istringstream oss("yyyyyyyya");
+    std::streambuf *backup = std::cin.rdbuf(oss.rdbuf());
+    String s = pStream->readString();
+    TEST_ASSERT_EQUAL_STRING("yyyyyyyya", s.c_str());
+    (void)std::cin.rdbuf(backup);
+}
+
+
 static void test_readStringUntil(void)
 {
     auto &streamFake = SimpleArduinoFake::getContext()._Stream;
@@ -306,6 +321,21 @@ static void test_available(void)
     TEST_ASSERT_EQUAL(9, pStream->available());
 }
 
+static void test_available_cin(void)
+{
+    auto &streamFake = SimpleArduinoFake::getContext()._Stream;
+    Stream* pStream(streamFake.getFake());
+    std::stringstream stream;
+    ArduinoNativeFake::setupStreamFake(streamFake, stream, std::cin);
+
+    TEST_ASSERT_EQUAL(0, pStream->available());
+
+    std::istringstream oss("123456789");
+    std::streambuf *backup = std::cin.rdbuf(oss.rdbuf());
+    TEST_ASSERT_EQUAL(9, pStream->available());
+    (void)std::cin.rdbuf(backup);
+}
+
 void run_stream_tests()
 {
     unity_filename_helper_t _ufname_helper(__FILE__);
@@ -318,6 +348,8 @@ void run_stream_tests()
     RUN_TEST(test_readBytes);
     RUN_TEST(test_readBytesUntil);
     RUN_TEST(test_readString);
+    RUN_TEST(test_readString_cin);
     RUN_TEST(test_readStringUntil);
     RUN_TEST(test_available);
+    RUN_TEST(test_available_cin);
  }

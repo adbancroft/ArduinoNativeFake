@@ -22,11 +22,8 @@ static inline void setupStreamFake(fakeit::Mock<TFake> &mock, std::ostream &oStr
     using namespace fakeit;
     
     When(Method(mock, available)).AlwaysDo([&iStream]() {
-        std::istream::pos_type original = iStream.tellg();
-        iStream.seekg(0, std::ios::end);
-        std::istream::pos_type available = iStream.tellg();
-        iStream.seekg(original);
-        return (int)available;
+        std::streamsize available = iStream.rdbuf()->in_avail();
+        return available>0 ? available : 0;
     });
 
     // This can't be declared as a static variable here, since this is a template.
