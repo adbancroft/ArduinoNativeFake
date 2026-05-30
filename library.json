@@ -11,6 +11,6 @@
   "frameworks": "arduino",
   "platforms": "native, windows_x86",
   "dependencies" : {
-    "ArduinoFake" : "https://github.com/adbancroft/SimpleArduinoFake"
+    "SimpleArduinoFake" : "https://github.com/adbancroft/SimpleArduinoFake"
   }
 }
